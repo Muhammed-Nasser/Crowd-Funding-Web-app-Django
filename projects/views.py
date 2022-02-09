@@ -166,16 +166,25 @@ def reportComment(request,id,project_id):
 
 #---------------------------------------------------------------------------------------------
 @login_required
-def rate(request,id):
+def rate(request, id):
     if request.method == 'POST':
         form = addRating(request.POST)
         if form.is_valid():
-            rate = form.save(commit=False)
-            rate.project_id= get_object_or_404(Projects, pk=id)
-            rate.save()
-            messages.add_message(request, messages.INFO, 'Rate Added successfully')
+            try:
+                rate = Rating.objects.get(project_id=get_object_or_404(Projects, pk=id),
+                                          user_id=get_object_or_404(User, pk=request.user.id))
+                value =form.save(commit=False)
+                rate.rating = value.rating
+                rate.save()
+                messages.add_message(request, messages.INFO, 'Rate Added successfully')
+            except:
+                rate = form.save(commit=False)
+                rate.project_id = get_object_or_404(Projects, pk=id)
+                rate.user_id = get_object_or_404(User, pk=request.user.id)
+                rate.save()
 
-    return redirect(viewdataofproject,id=id)
+                messages.add_message(request, messages.INFO, 'Rate Added successfully')
+    return redirect(viewdataofproject, id=id)
 
 #---------------------------------------------------------------------------------------------
 

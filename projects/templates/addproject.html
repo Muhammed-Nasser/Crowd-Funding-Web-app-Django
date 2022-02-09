@@ -2,6 +2,9 @@
 {% block content %}
 <div class="addproject_container">
     <div class="create_form">
+        {% for i  in messages %}
+        <p style="color:red">{{i}}</p>
+    {% endfor %}
         <form action="{%url 'addproject'  %}" method="post" enctype="multipart/form-data">     
             {% csrf_token %}
             {{ form.as_p }}

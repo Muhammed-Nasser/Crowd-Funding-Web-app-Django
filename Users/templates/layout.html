@@ -259,10 +259,10 @@
 
 
                                 <ul class="submenu-list list-unstyled">
-                                    {% for i in categories %}
+                                    {% for x in categories %}
                                         <li class="submenu-item">
-                                            <a class="submenu-link" href="{% url 'category_projects' i.id %}"
-                                            >{{ i.category }}</a
+                                            <a class="submenu-link" href="{% url 'category_projects' x.id %}"
+                                            >{{ x.category }}</a
                                             >
                                         </li>
                                     {% endfor %}

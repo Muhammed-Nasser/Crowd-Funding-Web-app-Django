@@ -37,7 +37,7 @@ class addDonation(forms.ModelForm):
 class addRating(forms.ModelForm):
       class Meta: 
          model = Rating
-         exclude= ['project_id']        
+         exclude= ['project_id','user_id']        
 
 # class addTags(forms.ModelForm):
 #          class Meta:
