@@ -7,10 +7,11 @@
         <form action="{% url 'editprofile' userinfo.id %}" method="post">
             <h1 class="text-center mb-4">Profile Information</h1>
             {% csrf_token %}
+            {{donate_sum}}
             <div class="row">
                 <div class="col-lg-8">
                     <div class="row">
-                        <label for="username">UserName</label>
+                        <label for="username">User Name</label>
                         <input type="text" class="form-control" id="username" name="username"
                                placeholder="Enter username " value="{{ userinfo.username }}">
                     </div>

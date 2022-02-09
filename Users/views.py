@@ -64,13 +64,19 @@ def profile(request, username):
     addtionalinfo = Profile.objects.get(user_id = id)
     user_project = Projects.objects.filter(user_id = id)
     categories=Categories.objects.all()
+    donate_sum = Donation.objects.all().filter(user_id=id)
 
+    d_sum = 0
+    for item in donate_sum:
+        # d_sum += item['amount_of_money']
+        pass
     if user:
         context = {
             'userinfo': user,
             'addtionalinfo': addtionalinfo,
             'userproject': user_project,
-            'categories':categories
+            'categories':categories,
+            'donate_sum':d_sum
         }
         return render(request, 'profile.html', context)
     else:
@@ -92,7 +98,6 @@ def user_login(request):
             user = authenticate(username=username,password=password)
             login(request,user)
             user_info = User.objects.get(username=username)
-            # user_info2 = user_info.objects.Profile_set.all()
             if user_info.is_active == True:
                 
                 return redirect(index)
@@ -108,14 +113,11 @@ def register(request):
             pr=form.save(commit=False)
             pr.is_active = False 
             pr.save()
-            #pr=form.save(commit=False)
             username = form.cleaned_data.get('username')
             profile = form2.save(commit=False)
-            #current_user.is_active = False 
             
             current_user = User.objects.get(username=username)
             
-            #pr.save()
             profile.user = current_user
             profile.save()
             current_site = get_current_site(request) 
@@ -155,7 +157,6 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):  
         user.is_active = True  
         user.save()  
-        #return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
         return redirect(user_login)  
     else:  
         return HttpResponse('Activation link is invalid!') 
