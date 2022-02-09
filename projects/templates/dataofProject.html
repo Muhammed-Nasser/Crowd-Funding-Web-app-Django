@@ -19,6 +19,9 @@
       </div>
       <div class="clear"></div>
       <div class="project_info">
+         {% for i  in messages %}
+             <p style="color:red">{{i}}</p>
+         {% endfor %}
          <h2>Project Title</h2>
          <h3>{{Projectdata.title}}</h3>
          <h2>Project Target</h2>

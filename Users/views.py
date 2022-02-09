@@ -124,7 +124,7 @@ def register(request):
                 'user': pr,  
                 'domain': current_site.domain,  
                 'uid':urlsafe_base64_encode(force_bytes(pr.pk)), 
-                 'token':account_activation_token.make_token(pr),  
+                'token':account_activation_token.make_token(pr),  
             })   
             to_email = form.cleaned_data.get('email')  
             email = EmailMessage(  
@@ -132,13 +132,7 @@ def register(request):
             ) 
             email.send()  
             return HttpResponse('Please confirm your email address to complete the registration')  
-              
-            # #user = User.objects.get(email=current_user['email'])
-            # token= RefreshToken.for_user(current_user)
-            # data = {'domain':}
-            # Util.send_email(data)
-
-            #return redirect(user_login)
+        
     else:
         form = UserRegisterForm()
         form2 = UserProfile()

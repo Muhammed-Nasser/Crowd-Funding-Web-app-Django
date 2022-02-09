@@ -50,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware'
 ]
 
 ROOT_URLCONF = 'Django_Project.urls'
@@ -77,16 +78,14 @@ WSGI_APPLICATION = 'Django_Project.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cwdapp',
-        'USER': 'djangouser',
-        'PASSWORD': 'password',
+        'NAME': 'CFW',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
         'PORT': '5432',
     }
-
 }
 
 
@@ -147,6 +146,6 @@ from Django_Project.cred import *
 
 EMAIL_USE_TLS = True  
 EMAIL_HOST = 'smtp.gmail.com'  
-EMAIL_HOST_USER = 'alazaly49@gmail.com'    
+EMAIL_HOST_USER = 'menna.emad.69@gmail.com'    
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD

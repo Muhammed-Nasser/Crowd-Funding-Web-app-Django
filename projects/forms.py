@@ -12,11 +12,14 @@ class Addcommentinproject(forms.ModelForm):
  
 
 class Addproject(forms.ModelForm):  
+  
+   start_time = forms.DateField(label="Start Date",required=True,widget=forms.DateInput(attrs={"placeholder":"YYYY-MM-DD"}))
+   end_time = forms.DateField(label="End Date",required=True,widget=forms.DateInput(attrs={"placeholder":"YYYY-MM-DD"}))
 
    class Meta:
       model = Projects
-      # fields = "__all__"
-      exclude= ['user_id','tags']
+      # exclude= ['user_id','tags']
+      fields = ['title', 'details', 'category', 'total_target', 'start_time', 'end_time']
 
 
 

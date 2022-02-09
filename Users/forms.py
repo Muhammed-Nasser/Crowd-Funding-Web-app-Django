@@ -11,6 +11,7 @@ class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder":"EMAIL ADDRESS"}))
     password1 = forms.CharField(label="",widget=forms.PasswordInput(attrs={"placeholder":"PASSWORD"}))
     password2 = forms.CharField(label="",widget=forms.PasswordInput(attrs={"placeholder":"CONFIRM PASSWORD"}))
+    
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
