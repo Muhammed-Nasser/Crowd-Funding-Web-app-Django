@@ -1,1 +1,4 @@
 cred.py*
+env
+.idea
+.vscode
