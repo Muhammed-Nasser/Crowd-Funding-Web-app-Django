@@ -7,7 +7,7 @@
         <form action="{% url 'editprofile' userinfo.id %}" method="post">
             <h1 class="text-center mb-4">Profile Information</h1>
             {% csrf_token %}
-            {{donate_sum}}
+            
             <div class="row">
                 <div class="col-lg-8">
                     <div class="row">
@@ -57,6 +57,8 @@
         </form>
 
         <h1 class="text-center">My Projects</h1>
+        <span> Total Donation : </span>
+        <span class="text-danger"> {{donate_sum}}</span>
         {###################################################################}
 
         <div class="app-content pt-3 p-md-3 p-lg-4">

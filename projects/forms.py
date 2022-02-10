@@ -18,7 +18,6 @@ class Addproject(forms.ModelForm):
 
    class Meta:
       model = Projects
-      # exclude= ['user_id','tags']
       fields = ['title', 'details', 'category', 'total_target', 'start_time', 'end_time']
 
 
@@ -26,7 +25,6 @@ class Addproject(forms.ModelForm):
 class Addimage(forms.ModelForm):
    class Meta:
       model = Images
-      # fields = "__all__"
       exclude= ['project_id']      
 
 class addDonation(forms.ModelForm):
@@ -39,7 +37,4 @@ class addRating(forms.ModelForm):
          model = Rating
          exclude= ['project_id','user_id']        
 
-# class addTags(forms.ModelForm):
-#          class Meta:
-#             model = Tags
-#             exclude= ['project_id']       
+     

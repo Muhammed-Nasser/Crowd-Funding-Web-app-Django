@@ -59,17 +59,22 @@ def index(request):
 
 @login_required
 def profile(request, username):
+
     user = User.objects.get(username = username)
     id = user.id
     addtionalinfo = Profile.objects.get(user_id = id)
     user_project = Projects.objects.filter(user_id = id)
     categories=Categories.objects.all()
-    donate_sum = Donation.objects.all().filter(user_id=id)
+    donate_sum = Donation.objects.all().filter(user_id=id).values('amount_of_money')
 
     d_sum = 0
+
+    # overall user donation
     for item in donate_sum:
-        # d_sum += item['amount_of_money']
-        pass
+        print(item)
+        d_sum += item['amount_of_money']
+        
+        
     if user:
         context = {
             'userinfo': user,
@@ -87,7 +92,11 @@ def editprofile(request, id):
     user = User.objects.filter(pk = id).update(username=request.POST['username'], email=request.POST['email'])
     addtionalinfo = Profile.objects.filter(user_id = id).update(country=request.POST['country'], phone=request.POST['phone'], social_media=request.POST['social_media'],birth=request.POST['birth'])
     ur = User.objects.get(pk = id)
+
     return redirect(profile, username=ur.username)
+
+
+#OUR FIRST STEPS
 
 def user_login(request):
     if request.method == 'POST':
@@ -139,6 +148,7 @@ def register(request):
         form = UserRegisterForm()
         form2 = UserProfile()
     return render(request,'register.html', {'form': form , 'form2':form2})
+
 
 
 @login_required
