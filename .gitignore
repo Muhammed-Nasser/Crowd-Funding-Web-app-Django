@@ -6,3 +6,5 @@ env
 media/profile_pics/
 media/Project_images/
 migrations/
+
+__pycache__
