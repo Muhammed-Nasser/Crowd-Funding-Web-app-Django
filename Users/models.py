@@ -39,7 +39,7 @@ class Profile(models.Model):
 
 # Changed the foriegn key from the user to his profile
 class Donation(models.Model):
-    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE, to_field='id', related_name='user_donation')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_donation')
     project_id = models.ForeignKey("projects.Projects", on_delete=models.CASCADE, related_name="project_donation")
     amount_of_money = models.FloatField()
 

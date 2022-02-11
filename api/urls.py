@@ -25,5 +25,6 @@ urlpatterns = [
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('view-all/', views.api_list, name="api/overview"),
     path('project/list/', views.projectList, name="project-list"),
+    path('myprofile',views.user_profile)
     
 ]
