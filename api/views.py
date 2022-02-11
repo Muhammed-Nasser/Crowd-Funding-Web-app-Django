@@ -10,7 +10,7 @@ from api.serializers import UserSerializer
 from .views import *
 from projects.models import *
 from Users.models import *
-
+from django.db.models import Avg,Sum,Count
 # Create your views here.
 
 #Nasser user crud 
@@ -103,7 +103,7 @@ def api_list(request):
         },
         'Projects': {
             'List': '/project/list/',
-            'Detail View': '/project/detail/<str:pk>/',
+            'Detail View': '/project/list/<str:pk>/',
             'Create': '/project/create/',
             'Update': '/project/update/<str:pk>/',
             'Delete': '/project/delete/<str:pk>/',
@@ -114,19 +114,149 @@ def api_list(request):
 
 
 @api_view(['GET'])
-def projectList(request):
+def projectsList(request):
     projects = Projects.objects.all()
     Project = ProjectSer(projects, many=True)
 
-    comments = Comment.objects.all()
-    commentSer = CommentSerializer(comments, many=True)
-	
-    donations = Donation.objects.all()
-	donationsSer = DonationSerializer(donations, many=True)
+    api_return = {
+       'Project Details': []
+    }
+
+    for proj in Project.data:
+
+        fullProjectDetails = {
+            'Project info': [],
+            'Project Donations': [],
+            'Project Images': [],
+            'Project Comments': [],
+            'Project Rating': []
+        }
+        DonationSum=0
+        RatingSum=0
+        count=0
+        print(proj['id'])
+
+        donations = Donation.objects.filter(project_id=proj['id'])
+        donationsSer = DonationSerializer(donations, many=True)
+        for donate in donationsSer.data:
+            DonationSum+=donate['amount_of_money']
+
+        images = Images.objects.filter(project_id=proj['id'])
+        imagesSer = ImageSer(images, many=True)
+
+        comments = Comment.objects.filter(project_id=proj['id'])
+        commentSer = CommentSerializer(comments, many=True)
+
+        rates = Rating.objects.filter(project_id=proj['id'])
+
+        ratingSer = RatingSer(rates, many=True)
+        for rate in ratingSer.data:
+            RatingSum += rate['rating']
+            count+=1
+
+
+        fullProjectDetails['Project info'].append(proj)
+        fullProjectDetails['Project Donations'].append(DonationSum)
+        if not count:
+            fullProjectDetails['Project Rating'].append(RatingSum)
+        else:
+            fullProjectDetails['Project Rating'].append(RatingSum/count)
+        fullProjectDetails['Project Images'].append(imagesSer.data)
+        fullProjectDetails['Project Comments'].append(commentSer.data)
+
+        api_return['Project Details'].append(fullProjectDetails)
+
+    return Response(api_return)
+
+@api_view(['GET'])
+def projectList(request, pk):
+    projects = Projects.objects.get(id=pk)
+    Project = ProjectSer(projects, many=False)
 
     api_return = {
-        'Project Details': Project.data,
-        'Project Comments': commentSer.data,
-        'Project Donations': donationsSer.data,
+       'Project Details': []
     }
+
+
+
+    fullProjectDetails = {
+        'Project info': [],
+        'Project Donations': [],
+        'Project Images': [],
+        'Project Comments': [],
+        'Project Rating': []
+    }
+    DonationSum=0
+    RatingSum=0
+    count=0
+    donations = Donation.objects.filter(project_id=pk)
+    donationsSer = DonationSerializer(donations, many=True)
+    for donate in donationsSer.data:
+        DonationSum+=donate['amount_of_money']
+
+    images = Images.objects.filter(project_id=pk)
+    imagesSer = ImageSer(images, many=True)
+
+    comments = Comment.objects.filter(project_id=pk)
+    commentSer = CommentSerializer(comments, many=True)
+
+    rates = Rating.objects.filter(project_id=pk)
+
+    ratingSer = RatingSer(rates, many=True)
+    for rate in ratingSer.data:
+        RatingSum += rate['rating']
+        count+=1
+
+
+    fullProjectDetails['Project info'].append(Project.data)
+    fullProjectDetails['Project Donations'].append(DonationSum)
+    if not count:
+        fullProjectDetails['Project Rating'].append(RatingSum)
+    else:
+        fullProjectDetails['Project Rating'].append(RatingSum/count)
+    fullProjectDetails['Project Images'].append(imagesSer.data)
+    fullProjectDetails['Project Comments'].append(commentSer.data)
+
+    api_return['Project Details'].append(fullProjectDetails)
+
     return Response(api_return)
+
+
+@api_view(['POST'])
+def projectCreate(request):
+
+    # api_return = {
+    #     'Project Details': []
+    # }
+
+    # fullProjectDetails = {
+    #     'Project info': [],
+    #     'Project Donations': [],
+    #     'Project Images': [],
+    #     'Project Comments': [],
+    #     'Project Rating': []
+    # }
+
+    Project = ProjectSer(data=request.data)
+    if Project.is_valid():
+        Project.save()
+    # donationsSer = DonationSerializer(data=request.data['Project Details'][0]['Project Donations'])
+    # if donationsSer.is_valid():
+    #     donationsSer.save()
+    # imagesSer = ImageSer(data=request.data['Project Details'][0]['Project Images'])
+    # if imagesSer.is_valid():
+    #     imagesSer.save()
+    # commentSer = CommentSerializer(data=request.data['Project Details'][0]['Project Comments'])
+    # if commentSer.is_valid():
+    #     commentSer.save()
+    # ratingSer = RatingSer(data=request.data['Project Details'][0][ 'Project Rating'])
+    # if ratingSer.is_valid():
+    #     ratingSer.save()
+    # fullProjectDetails['Project info'].append(Project.data)
+    # fullProjectDetails['Project Rating'].append(donationsSer.data)
+    # fullProjectDetails['Project Donations'].append(ratingSer.data)
+    # fullProjectDetails['Project Images'].append(imagesSer.data)
+    # fullProjectDetails['Project Comments'].append(commentSer.data)
+    # api_return['Project Details'].append(fullProjectDetails)
+
+    return Response(Project.data)
