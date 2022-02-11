@@ -3,5 +3,6 @@ env
 .idea
 .vscode
 
-media/profile_pics/*
-media/Project_images/*
+media/profile_pics/
+media/Project_images/
+migrations/
