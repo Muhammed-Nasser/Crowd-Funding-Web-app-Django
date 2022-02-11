@@ -1,4 +1,4 @@
-
+from re import T
 from django.shortcuts import render
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
@@ -8,6 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.serializers import UserSerializer
 from .views import *
+from projects.models import *
+from Users.models import *
 
 # Create your views here.
 
@@ -36,7 +38,6 @@ def user_detail(request, pk, format=None):
     elif request.method == 'DELETE':
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 # group all common behaviour into the class
 from .serializers import *
@@ -94,7 +95,6 @@ def user_profile(request):
     data['donations'] = donation_serializer.to_representation(current_user_donations)
     return Response(data)
 
-
 @api_view(['GET'])
 def api_list(request):
     api_urls = {
@@ -117,12 +117,16 @@ def api_list(request):
 def projectList(request):
     projects = Projects.objects.all()
     Project = ProjectSer(projects, many=True)
+
     comments = Comment.objects.all()
-    commentSer = CommentSer(comments, many=True)
+    commentSer = CommentSerializer(comments, many=True)
+	
+    donations = Donation.objects.all()
+	donationsSer = DonationSerializer(donations, many=True)
 
     api_return = {
         'Project Details': Project.data,
-        'Project Comments': commentSer.data
+        'Project Comments': commentSer.data,
+        'Project Donations': donationsSer.data,
     }
     return Response(api_return)
-

@@ -86,19 +86,6 @@ class ImageSer(serializers.ModelSerializer):
         exclude = ['project_id']
 
 
-class CommentSer(serializers.ModelSerializer):
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-
-# TODO: I made another one above ...
-class DonationSer(serializers.ModelSerializer):
-    class Meta:
-        model = Donation
-        fields = '__all__'
-
-
 class RatingSer(serializers.ModelSerializer):
     class Meta:
         model = Rating
