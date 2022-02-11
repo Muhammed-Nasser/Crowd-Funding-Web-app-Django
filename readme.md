@@ -26,14 +26,19 @@
 
 2. Add ***cred.py*** file in **Django_Project** folder
    <blockquote>
-      <p>DB_NAME = <span style="color:blue;">your database name</span></p>
-      <p>DB_USER = <span style="color:blue;">your database user_</span></p>
-      <p>DB_PASS = <span style="color:blue;">your database password</span></p>
+      <p>DB_NAME = _your database name_ </p>
+      <p>DB_USER = _your database user_ </p>
+      <p>DB_PASS = _your database password_ </p>
       <br/>
-      <p>EMAIL_HOST_USER = <span style="color:blue;"> your email</span></p>
-      <p>EMAIL_HOST_PASSWORD =<span style="color:blue;">your email password</span></p>
+      <p>EMAIL_HOST_USER = _your email_ </p>
+      <p>EMAIL_HOST_PASSWORD = _your email password_ </p>
    </blockquote>
-3. Run the django app
+3. Migrate the models to your database
+   ```bash
+   $ python manage.py makemigrations
+   $ python manage.p migrate
+   ```
+4. Run the django app
 
    ```bash
    python3 manage.py runserver [port]
