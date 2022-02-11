@@ -7,8 +7,11 @@ name = "pypi"
 six = "*"
 django = "*"
 django-utils-six = "*"
-djangorestframework = "*"
 psycopg2 = "*"
+pillow = "*"
+markdown = "*"
+django-filter = "*"
+django-rest-framework = "*"
 
 [dev-packages]
 

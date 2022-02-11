@@ -51,11 +51,10 @@ def addproject(request):
 
 @login_required
 def viewdataofproject(request,id):  
-    session_user= request.user.id
+    session_user=request.user.id
     Projectdata=Projects.objects.get(pk=id)
     categories=Categories.objects.all()
     user_id=Projectdata.user_id.id
-
     dict=Donation.objects.filter(project_id=id).aggregate(sum=Sum('amount_of_money')) 
     authority=''
 

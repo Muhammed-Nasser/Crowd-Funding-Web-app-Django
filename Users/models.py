@@ -1,8 +1,7 @@
-from django.core.validators import RegexValidator
-from django.db import models
-from projects.models import *
-from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import User
+
+from projects.models import *
+
 
 # Create your models here.
 
@@ -27,7 +26,7 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} "
+        return f"{self.user.username}"
 
     # -----------------------------------------------------------------------------------------------------------------
     """
@@ -38,13 +37,14 @@ class Profile(models.Model):
     """
 
 
+# Changed the foriegn key from the user to his profile
 class Donation(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    project_id = models.ForeignKey("projects.Projects", on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_donation')
+    project_id = models.ForeignKey("projects.Projects", on_delete=models.CASCADE, related_name="project_donation")
     amount_of_money = models.FloatField()
 
     def __str__(self):
-        return "User Id" + str(self.user_id)
+        return f"{self.user_id} - {self.project_id}"
 
 
 # -----------------------------------------------------------------------------------------------------------------
