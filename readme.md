@@ -24,15 +24,24 @@
    $ exit # to exit from the environment
    ```
 
-2. Run the django app
+2. Add ***cred.py*** file in **Django_Project** folder
+   <blockquote>
+      <p>DB_NAME = <span style="color:blue;">your database name</span></p>
+      <p>DB_USER = <span style="color:blue;">your database user_</span></p>
+      <p>DB_PASS = <span style="color:blue;">your database password</span></p>
+      <br/>
+      <p>EMAIL_HOST_USER = <span style="color:blue;"> your email</span></p>
+      <p>EMAIL_HOST_PASSWORD =<span style="color:blue;">your email password</span></p>
+   </blockquote>
+3. Run the django app
 
    ```bash
    python3 manage.py runserver [port]
    ```
 
-___
+---
 
 ## Technologies
 
 - Django Framework
-- Django Rest-Framework
+- Django-Rest Framework

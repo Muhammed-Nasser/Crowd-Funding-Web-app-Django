@@ -1,10 +1,8 @@
 from rest_framework import serializers
-
+from .serializers import *
+from projects.models import Projects, Categories, Images, Rating,Tags
 from Users.models import *
 from .serializers import *
-from rest_framework import serializers
-from projects.models import Projects, Categories, Images, Rating,Tags
-from Users.models import Comment, Donation
 # import from models in the same folder "app"
 
 
@@ -57,6 +55,10 @@ class UserProfileSerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         return data
 
+
+
+
+# Projects
 
 class CategoriesSer(serializers.ModelSerializer):
    class Meta:

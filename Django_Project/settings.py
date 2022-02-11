@@ -21,7 +21,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(+bt-+u*wa3lkc@puf55pzat0s4@$4f=t5l*ut(y7&io!r)z40'
-
+from Django_Project.cred import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -81,9 +81,9 @@ WSGI_APPLICATION = 'Django_Project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'CRUD',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASS,
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -138,15 +138,9 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL='users:login'
 
-# EMAIL_USE_TLS=True
-# EMAIL_HOST='smtp.gmail.com'
-# EMAIL_PORT=587
-# EMAIL_HOST_USER='alazaly49@gmail.com'
-# EMAIL_HOST_PASSWORD='eeuuuuunnmxnmnmnalazalybbbb1996'
-from Django_Project.cred import *
 
 EMAIL_USE_TLS = True  
 EMAIL_HOST = 'smtp.gmail.com'  
-EMAIL_HOST_USER = 'menna.emad.69@gmail.com'    
+EMAIL_HOST_USER = EMAIL_HOST_USER    
 EMAIL_PORT = 587
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD

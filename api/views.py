@@ -7,6 +7,16 @@ import projects
 from .serializers import ProjectSer,CommentSer
 from projects.models import Projects
 from Users.models import Comment
+from django.shortcuts import render
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from collections import namedtuple
+import projects
+from .serializers import ProjectSer,CommentSer
+from projects.models import Projects
+from Users.models import Comment
+
 
 
 # user profile
@@ -38,16 +48,8 @@ class UserViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
 
 
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserProfileSerializer
-#     # permission_classes = [permissions.IsAuthenticated]
-
-
-#
 # @api_view(['GET'])
 # def profile_detail(request,pk):
-
 
 @api_view(['GET'])
 def api_list(request):
