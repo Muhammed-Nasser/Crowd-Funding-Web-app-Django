@@ -9,6 +9,7 @@ django = "*"
 django-utils-six = "*"
 djangorestframework = "*"
 psycopg2 = "*"
+pillow = "*"
 
 [dev-packages]
 

@@ -1,4 +1,55 @@
+from rest_framework import serializers
+
+from Users.models import *
+
+# import from models in the same folder "app"
 
 
+# serializer for user profile details
 
-from .serializers import *
+"""
+- view his own:
+    * profile
+    * projects
+    * donations
+    * edit all except email
+    * delete after confirm
+"""
+
+
+class DonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donation
+        fields = '__all__'
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reportno
+        fields = '__all__'
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    # to get the related donation linked to the user profile
+    user_donation = DonationSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        return data

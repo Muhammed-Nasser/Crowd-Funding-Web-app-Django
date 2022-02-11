@@ -2,3 +2,6 @@ cred.py*
 env
 .idea
 .vscode
+
+media/profile_pics/*
+media/Project_images/*
