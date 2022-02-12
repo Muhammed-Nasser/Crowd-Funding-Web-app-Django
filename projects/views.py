@@ -3,7 +3,6 @@ from django.http import HttpResponse ,HttpResponseRedirect
 from django.forms import formset_factory
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
 from .models import *
 from Users.models import *
 from django.db.models import Avg,Sum,Count
