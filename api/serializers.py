@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from .serializers import *
@@ -38,20 +37,23 @@ class ReportSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
-    # to get the related donation linked to the user profile
-    # user_donation = DonationSerializer(many=True)
+    username = serializers.CharField(source="user.username")
+    email = serializers.EmailField(source="user.email", read_only=True)
 
-    # user_projects = ProjectSer(many=True)
+    password = serializers.CharField(source="user.password", style={'input_type': 'password'}, required=True)
 
     class Meta:
         model = Profile
+        # fields = '__all__'
+        exclude = ['user']
+
+
+class UserSerializer(serializers.ModelSerializer):
+    profile = UserProfileSerializer(required=False)
+
+    class Meta:
+        model = User
         fields = '__all__'
 
 
@@ -103,4 +105,3 @@ class RatingSer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = '__all__'
-

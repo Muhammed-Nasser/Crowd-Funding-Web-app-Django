@@ -7,7 +7,7 @@ from projects.models import *
 
 # US ^^
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     phone = models.CharField(
         max_length=12,
         validators=[
@@ -16,11 +16,12 @@ class Profile(models.Model):
                 message="Phone must be start 010, 011, 012, 015 and all number contains 11 digits",
                 code="invalid number",
             )
-        ],
+        ],blank=True
+
     )
     birth = models.DateField(null=True)
-    social_media = models.URLField()
-    country = models.CharField(max_length=40)
+    social_media = models.URLField(blank=True)
+    country = models.CharField(max_length=40,blank=True)
     image = models.ImageField(
         default="default.jpg", upload_to="profile_pics", blank=True
     )
@@ -37,7 +38,7 @@ class Profile(models.Model):
     """
 
 
-# Changed the foriegn key from the user to his profile
+# Changed the foreign key from the user to his profile
 class Donation(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, to_field='id', related_name='user_donation')
     project_id = models.ForeignKey("projects.Projects", on_delete=models.CASCADE, related_name="project_donation")

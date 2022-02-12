@@ -1,17 +1,15 @@
-
-from django.shortcuts import render
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from rest_framework import status
-from rest_framework import permissions
+from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.serializers import UserSerializer
+from rest_framework.templatetags.rest_framework import data
+
+from .serializers import *
 from .views import *
+
 
 # Create your views here.
 
-#Nasser user crud 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def user_detail(request, pk, format=None):
     """
@@ -36,39 +34,27 @@ def user_detail(request, pk, format=None):
     elif request.method == 'DELETE':
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
-# group all common behaviour into the class
-from .serializers import *
 
+'''
+Profile User CRUD
+'''
 # The Queryset required => end point to allow operations on the model
 
 # user profile
 """
 - view his own:
-    * profile
-    * projects
-    * donations
+    * profile   [/]
+    * projects  [/]
+    * donations [/]
     * edit all except email
     * delete after confirm
 """
 
 
-class UserProfileViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = UserProfileSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+# Helper function to combine all the profile data => return data
 
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    # permission_classes = [permissions.IsAuthenticated]
-
-
-@api_view(['GET'])
-def user_profile(request):
-    current_user = request.user
+def get_profile_data(current_user):
     # only one profile per user => get
     current_user_profile = Profile.objects.get(user=current_user)
     # many projects => filter
@@ -92,7 +78,135 @@ def user_profile(request):
     data['projects'] = project_serializer.to_representation(current_user_projects)
     data['total-donations'] = d_sum
     data['donations'] = donation_serializer.to_representation(current_user_donations)
+    return data
+
+
+"""
+<QueryDict: {
+    'csrfmiddlewaretoken': ['___'], 
+    'name': ['___'],
+    'password': ['___'],
+    'phone': ['___'], 
+    'birth': ['___'],
+    'social_media': ['___'],
+    'country': ['___'],
+    'image': ['___']
+}>
+
+# Profile model:
+  user
+  phone
+  birth
+  social_media
+  country
+  image
+
+"""
+
+# TODO: create an instance of a new user and an instance of a profile based on that user
+
+class UserProfileViewSet(viewsets.ViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = UserProfileSerializer
+
+    
+
+    # CREATE
+    # first create a user then assgin a profile to him
+    def create(self, request):
+        """
+        creating a new user/profile is available for all 
+        """
+        user_serializer = UserSerializer(data=request.data)
+        user_profile_serializer = UserProfileSerializer(data=request.data)
+
+        #create a new user
+        if user_serializer.is_valid():
+            user_serializer.save()
+        else:
+            print(user_serializer.errors)
+        
+
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    """
+    override the retrieve method to only get his profile 
+    """
+    # RETRIEVE
+    def retrieve(self, request, pk=None):
+        current_user = request.user
+        """
+        Accessing other profiles is not authorized
+        """
+
+        if int(pk) != current_user.id:
+            return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+        data = get_profile_data(current_user)
+        return Response(data)
+
+    # UPDATE
+    def update(self, request, pk=None):
+        current_user = request.user
+        """
+        Update other profiles is not authorized
+        """
+        if int(pk) != current_user.id:
+            return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+    # DELETE
+    def destroy(self, request, pk=None):
+        current_user = request.user
+        """
+        Accessing other profiles is not authorized
+        """
+        if int(pk) != current_user.id:
+            return Response(status=status.HTTP_203_NON_AUTHORITATIVE_INFORMATION)
+
+        self.perform_destroy(current_user)
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+
+# Create
+# Retrieve
+"""
+This is another way to retrieve user profile
+"""
+
+
+@api_view(['GET'])
+def user_profile(request):
+    current_user = request.user
+
+    data = get_profile_data(current_user)
     return Response(data)
+
+
+# Update
+@api_view(['PUT'])
+def profile_edit(request):
+    current_user = request.user
+    current_user_profile = Profile.objects.get(user=current_user)
+    serializer = UserProfileSerializer(instance=current_user_profile, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+    return Response(serializer.data)
+
+
+@api_view(['DELETE'])
+def profile_delete(request):
+    current_user = request.user
+    current_user_profile = Profile.objects.get(user=current_user)
+    current_user_profile.delete()
 
 
 @api_view(['GET'])
@@ -125,4 +239,3 @@ def projectList(request):
         'Project Comments': commentSer.data
     }
     return Response(api_return)
-
