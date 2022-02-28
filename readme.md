@@ -1,5 +1,7 @@
 # CrowdFunding App
 
+Web platform for starting fundraise projects in Egypt. 
+
 ## Installation
 
 1. Start a virtual environment
